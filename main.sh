@@ -82,7 +82,7 @@ main() {
     fi
 
     if [[ -n "${INPUT_ENABLE_CLOUD_PROVIDER:-}" ]]; then
-        registry_args+=(--enable-cloud-provider "${INPUT_ENABLE_CLOUD_PROVIDER}")
+        args+=(--enable-cloud-provider "${INPUT_ENABLE_CLOUD_PROVIDER}")
     fi
 
     "${SCRIPT_DIR}/kind.sh" ${args[@]+"${args[@]}"}

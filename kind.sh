@@ -265,7 +265,7 @@ setup_cloud_provider(){
     sudo mv ./bin/cloud-provider-kind /usr/local/bin/cloud-provider-kind
     sudo chmod +x /usr/local/bin/cloud-provider-kind
 
-    cloud-provider-kind &
+    cloud-provider-kind -v=0 &
     echo "cloud-provider-kind started ✅"
 
     cd - > /dev/null

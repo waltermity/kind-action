@@ -257,12 +257,16 @@ EOF
 
 setup_cloud_provider(){
     echo "Setting up cloud-provider-kind..."
-    git clone https://github.com/kubernetes-sigs/cloud-provider-kind.git
+    git clone -q https://github.com/kubernetes-sigs/cloud-provider-kind.git > /dev/null 2>&1
     cd cloud-provider-kind
-    make
+    make -s > /dev/null 2>&1
+    echo "cloud-provider-kind built successfully ✅"
 
     sudo mv ./bin/cloud-provider-kind /usr/local/bin/cloud-provider-kind
     sudo chmod +x /usr/local/bin/cloud-provider-kind
+
+    cloud-provider-kind &
+    echo "cloud-provider-kind started ✅"
 
     cd - > /dev/null
 }

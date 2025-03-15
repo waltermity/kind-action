@@ -276,5 +276,6 @@ jobs:
               echo "Cloud provider container is present."
             else
               echo "Cloud provider container is not present."
+              
               exit 1
             fi        

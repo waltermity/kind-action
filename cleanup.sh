@@ -25,6 +25,14 @@ main() {
     args=(--name "${INPUT_CLUSTER_NAME:-$DEFAULT_CLUSTER_NAME}")
     registry_args=("${INPUT_REGISTRY_NAME:-$DEFAULT_REGISTRY_NAME}")
 
+    if [[ "${INPUT_ENABLE_CLOUD_PROVIDER:-false}" == true ]]; then
+        
+        docker rm -f $(docker ps -q --filter "name=kindccm") || true
+        
+        rm -f /usr/local/bin/cloud-provider-kind || true
+        rm -rf cloud-provider-kind || true
+    fi
+
     docker rm -f "${registry_args[@]}" || "${INPUT_IGNORE_FAILED_CLEAN}"
     
     kind delete cluster "${args[@]}" || "${INPUT_IGNORE_FAILED_CLEAN}"

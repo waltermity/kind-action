@@ -37,6 +37,7 @@ Usage: $(basename "$0") <options>
     -k, --kubectl-version                   The kubectl version to use (default: $DEFAULT_KUBECTL_VERSION)
     -o, --install-only                      Skips cluster creation, only install kind (default: false)
         --with-registry                     Enables registry config dir for the cluster (default: false)
+        --enable-cloud-provider             Enables cloud provider for the cluster (default: false)
 
 EOF
 }
@@ -53,6 +54,7 @@ main() {
     local install_only=false
     local with_registry=false
     local config_with_registry_path="/etc/kind-registry/config.yaml"
+    local enable_cloud_provider=
 
     parse_command_line "$@"
 
@@ -198,6 +200,14 @@ parse_command_line() {
                     with_registry=true
                 fi
                 ;;
+            --enable-cloud-provider)
+                if [[ -n "${2:-}" ]]; then
+                    enable_cloud_provider="$2"
+                    shift
+                else
+                    enable_cloud_provider=true
+                fi
+                ;;
             *)
                 break
                 ;;
@@ -245,6 +255,22 @@ EOF
     sudo chmod a+r "$config_with_registry_path"
 }
 
+setup_cloud_provider(){
+    echo "Setting up cloud-provider-kind..."
+    git clone -q https://github.com/kubernetes-sigs/cloud-provider-kind.git > /dev/null 2>&1
+    cd cloud-provider-kind
+    make -s > /dev/null 2>&1
+    echo "cloud-provider-kind built successfully ✅"
+
+    sudo mv ./bin/cloud-provider-kind /usr/local/bin/cloud-provider-kind
+    sudo chmod +x /usr/local/bin/cloud-provider-kind
+
+    cloud-provider-kind > /tmp/cloud-provider.log 2>&1 &
+    echo "cloud-provider-kind started ✅"
+
+    cd - > /dev/null
+}
+
 create_kind_cluster() {
     echo 'Creating kind cluster...'
     local args=(create cluster "--name=${cluster_name}" "--wait=${wait}")
@@ -272,6 +298,10 @@ create_kind_cluster() {
             create_config_with_registry
             args+=(--config "$config_with_registry_path")
         fi
+    fi
+
+    if [[ "${enable_cloud_provider}" == true ]]; then
+        setup_cloud_provider
     fi
 
     "${kind_dir}/kind" "${args[@]}"

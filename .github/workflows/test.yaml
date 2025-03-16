@@ -272,10 +272,9 @@ jobs:
 
         - name: Test
           run: |
-            if [[ -n "$(docker ps --filter "name=kindccm" --format "{{.ID}}")" ]]; then
-              echo "Cloud provider container is present."
+            if ps aux | grep -v grep | grep cloud-provider-kind; then
+              echo "Cloud provider is present."
             else
-              echo "Cloud provider container is not present."
-              
+              echo "Cloud provider is not present."
               exit 1
             fi        

@@ -269,8 +269,6 @@ install_cloud_provider(){
 
     cloud-provider-kind > /tmp/cloud-provider.log 2>&1 &
     echo "cloud-provider-kind started ✅"
-
-    cd - > /dev/null
 }
 
 create_kind_cluster() {

@@ -61,7 +61,7 @@ inputs:
     description: "Whether to ignore the post-delete the cluster (default: false)"
     default: "false"
     required: false
-  enable_cloud_provider:
+  cloud_provider:
     description: "Whether to use cloud provider loadbalancer (default: none)"
     required: false
     default: "false"

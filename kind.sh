@@ -258,7 +258,7 @@ EOF
 
 install_cloud_provider(){
     echo "Setting up cloud-provider-kind..."
-    wget -O cloud-provider-kind.tar.gz https://github.com/kubernetes-sigs/cloud-provider-kind/releases/download/v${DEFAULT_CLOUD_PROVIDER_KIND_VERSION}/cloud-provider-kind_${DEFAULT_CLOUD_PROVIDER_KIND_VERSION}_linux_amd64.tar.gz
+    wget -q -O cloud-provider-kind.tar.gz https://github.com/kubernetes-sigs/cloud-provider-kind/releases/download/v${DEFAULT_CLOUD_PROVIDER_KIND_VERSION}/cloud-provider-kind_${DEFAULT_CLOUD_PROVIDER_KIND_VERSION}_linux_amd64.tar.gz > /dev/null 2>&1
     mkdir -p cloud-provider-kind-tmp
     tar -xzf cloud-provider-kind.tar.gz -C cloud-provider-kind-tmp
     chmod +x cloud-provider-kind-tmp/cloud-provider-kind
